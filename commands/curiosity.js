@@ -119,7 +119,7 @@ function checkRarity(allCardsInDeck, rarities, maxNumForRarities, maxNumOfEachCa
   if (numForRarities > maxNumForRarities) {
     errors.push(
       `You have too many ${rarities.join(' or ')} cards in your mainboard. `
-      + `You can only have ${maxNumOfEachCard} ${rarities.join(' or ')} cards but you have ${numForRarities} in your deck: ${cardsInRarity.map((c) => `\`${c.cardName}(${c.cardCount})\``).join(', ')}`,
+      + `You can only have ${maxNumForRarities} ${rarities.join(' or ')} cards but you have ${numForRarities} in your deck: ${cardsInRarity.map((c) => `\`${c.cardName}(${c.cardCount})\``).join(', ')}`,
     );
   }
 
