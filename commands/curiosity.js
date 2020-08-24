@@ -1,27 +1,22 @@
 const Database = require('better-sqlite3');
 
 const db = new Database('./AllPrintings.sqlite');
-
-function getFromDatabase(query) {
-  return query.get();
-}
-
-function loadCardQuery(card) {
-  return db.prepare(`
-    select name, setCode, number, rarity, types
-    from cards
-    where
-      setCode = '${card.setCode}'
-      and number = ${card.cardNumber}
-  `);
-}
+db.pragma('journal_mode = WAL');
 
 function loadCards(parsedMainBoardCards, parsedSideBoardCards) {
   const loadedMainBoardCards = [];
   const loadedSideBoardCards = [];
 
+  const loadCardQuery = db.prepare(`
+    select name, setCode, number, rarity, types
+    from cards
+    where
+      setCode = ?
+      and number = ?
+  `);
+
   parsedMainBoardCards.forEach((card) => {
-    const loadedCard = getFromDatabase(loadCardQuery(card));
+    const loadedCard = loadCardQuery.get(card.setCode, card.cardNumber);
 
     if (loadedCard) {
       // eslint-disable-next-line no-param-reassign
@@ -36,7 +31,7 @@ function loadCards(parsedMainBoardCards, parsedSideBoardCards) {
   });
 
   parsedSideBoardCards.forEach((card) => {
-    const loadedCard = getFromDatabase(loadCardQuery(card));
+    const loadedCard = loadCardQuery.get(card.setCode, card.cardNumber);
 
     if (loadedCard) {
       // eslint-disable-next-line no-param-reassign
@@ -136,13 +131,18 @@ function checkRarity(allCardsInDeck, rarities, maxNumForRarities, maxNumOfEachCa
 }
 
 function readAndParseAndLoadDeck(rawData) {
+  // console.log(rawData);
   const [parsedMainBoardCards, parsedSideBoardCards] = parsedCardsFromRawLines(rawData.split('\n'));
+  console.log(`parsed ${parsedMainBoardCards.length + parsedSideBoardCards.length} cards`);
 
   const [loadedMainBoardCards, loadedSideBoardCards] = loadCards(
     parsedMainBoardCards,
     parsedSideBoardCards,
   );
+
   const allCardsInDeck = loadedMainBoardCards.concat(loadedSideBoardCards);
+
+  console.log(`loaded ${allCardsInDeck.length} cards`);
 
   return { allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards };
 }
@@ -191,7 +191,7 @@ function checkDeck(deck) {
     allErrors.push(...uniqErroneousCards);
   }
 
-  return allErrors.join('\n');
+  return allErrors;
 }
 
 module.exports = {
@@ -205,8 +205,16 @@ module.exports = {
     + '2 Pridemalkin(M21) 196',
   ],
   async execute(messageContent) {
+    console.log('checking deck');
     const deck = readAndParseAndLoadDeck(messageContent);
 
-    return checkDeck(deck);
+    const allErrors = checkDeck(deck);
+    if (allErrors.length > 0) {
+      // eslint-disable-next-line prefer-template
+      return '❌ This deck does not meet the Curiosity format ❌\n'
+        + 'Errors:\n'
+        + allErrors.join('\n');
+    }
+    return '✅ Deck is valid for Curiosity! ✅';
   },
 };
