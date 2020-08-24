@@ -5,6 +5,6 @@ const ping = require('../../../commands/ping.js');
 
 describe('ping', () => {
   it('returns pong', async () => {
-    assert.equal('Pong.', await ping.execute('!ping'));
+    assert.equal('Pong.', await ping.execute('$ping'));
   });
 });

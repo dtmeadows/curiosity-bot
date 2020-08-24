@@ -1,7 +1,7 @@
 module.exports = {
   name: 'ping',
   description: 'Ping!',
-  aliases: ['upvote'],
+  aliases: [],
   secret_aliases: ['upboat'],
   async execute() {
     return 'Pong.';
