@@ -36,6 +36,14 @@ describe('handleMessageContent', () => {
 
         assert.equal(expectedErrorText, await handleMessageContent(`$curiosity ${rawData} `));
       });
+
+      it('handles when command and first card are on first line', async () => {
+        const samplePath = path.join(__dirname, '../../sample_decks/sample_deck_list3.txt');
+        const rawData = fs.readFileSync(samplePath, 'utf8');
+
+        const expectedSuccessText = '✅ Deck is valid for Curiosity! ✅';
+        assert.equal(expectedSuccessText, await handleMessageContent(`$curiosity ${rawData} `));
+      });
     });
   });
 });

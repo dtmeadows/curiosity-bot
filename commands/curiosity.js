@@ -53,9 +53,10 @@ function loadCards(parsedMainBoardCards, parsedSideBoardCards) {
 }
 
 function parsedCardsFromRawLines(rawDataArray) {
-  const cardRegex = /^(?<cardCount>\d+)\s+(?<cardName>.*)\s+\((?<setCode>\w+)\)\s+(?<cardNumber>\d+)\s*$/;
+  const cardRegex = /^\s*(?<cardCount>\d+)\s+(?<cardName>.*)\s+\((?<setCode>\w+)\)\s+(?<cardNumber>\d+)\s*$/;
   const mainBoardCards = [];
   const sideBoardCards = [];
+  const parsingErrors = [];
 
   let sideBoardFound = false;
   rawDataArray.forEach((rawLine) => {
@@ -72,12 +73,13 @@ function parsedCardsFromRawLines(rawDataArray) {
     } else if (['', 'deck'].includes(rawLine.trim().toLowerCase())) {
       // ignore empty line
     } else {
-      console.error('unmatched line found');
-      console.log(rawLine);
+      const error = `unmatched line found: \`${rawLine}\``;
+      parsingErrors.push(error);
+      console.log(error);
     }
   });
 
-  return [mainBoardCards, sideBoardCards];
+  return [mainBoardCards, sideBoardCards, parsingErrors];
 }
 
 function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
@@ -132,7 +134,7 @@ function checkRarity(allCardsInDeck, rarities, maxNumForRarities, maxNumOfEachCa
 
 function readAndParseAndLoadDeck(rawData) {
   // console.log(rawData);
-  const [parsedMainBoardCards, parsedSideBoardCards] = parsedCardsFromRawLines(rawData.split('\n'));
+  const [parsedMainBoardCards, parsedSideBoardCards, parsingErrors] = parsedCardsFromRawLines(rawData.split('\n'));
   console.log(`parsed ${parsedMainBoardCards.length + parsedSideBoardCards.length} cards`);
 
   const [loadedMainBoardCards, loadedSideBoardCards] = loadCards(
@@ -144,15 +146,16 @@ function readAndParseAndLoadDeck(rawData) {
 
   console.log(`loaded ${allCardsInDeck.length} cards`);
 
-  return { allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards };
+  return [
+    allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, parsingErrors,
+  ];
 }
 
-function checkDeck(deck) {
+function checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards) {
   const approvedSet = 'M21';
   const minNumberOfMainDeckCards = 40;
   const maxNumberOfSideboardCards = 8;
 
-  const { allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards } = deck;
   const deckErrors = [];
   checkCardsAreFromSet(allCardsInDeck, approvedSet);
 
@@ -206,9 +209,15 @@ module.exports = {
   ],
   async execute(messageContent) {
     console.log('checking deck');
-    const deck = readAndParseAndLoadDeck(messageContent);
+    const allErrors = [];
+    const [
+      allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, parsingErrors,
+    ] = readAndParseAndLoadDeck(messageContent);
 
-    const allErrors = checkDeck(deck);
+    allErrors.push(...parsingErrors);
+
+    allErrors.push(...checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards));
+
     if (allErrors.length > 0) {
       // eslint-disable-next-line prefer-template
       return '❌ This deck does not meet the Curiosity format ❌\n'

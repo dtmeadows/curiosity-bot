@@ -1,4 +1,6 @@
 /* eslint-env mocha */
+const assert = require('assert');
+
 const fs = require('fs');
 const path = require('path');
 const checkDeck = require('../../../commands/curiosity.js');
@@ -14,5 +16,9 @@ describe('checkDeck', () => {
 
       checkDeck.execute(rawData);
     });
+  });
+
+  it('returns an error if a line cannot be parsed', async () => {
+    assert.match(await checkDeck.execute('1 Stormwing Entity (M21)'), new RegExp('unmatched line found: `1 Stormwing Entity \\(M21\\)', 's'));
   });
 });
