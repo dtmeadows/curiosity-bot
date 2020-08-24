@@ -20,7 +20,6 @@ async function handleMessage(message) {
     );
 
     if (response) {
-
       message.channel.send(response);
     }
   } catch (error) {

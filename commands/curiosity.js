@@ -1,33 +1,27 @@
-const fs = require('fs');
-const path = require('path');
-
 const Database = require('better-sqlite3');
 
 const db = new Database('./AllPrintings.sqlite');
-
-function getFromDatabase(query) {
-  return query.get();
-}
-
-function loadCardQuery(card) {
-  return db.prepare(`
-    select name, setCode, number, rarity, types
-    from cards
-    where
-      setCode = '${card.setCode}'
-      and number = ${card.cardNumber}
-  `);
-}
+db.pragma('journal_mode = WAL');
 
 function loadCards(parsedMainBoardCards, parsedSideBoardCards) {
   const loadedMainBoardCards = [];
   const loadedSideBoardCards = [];
 
+  const loadCardQuery = db.prepare(`
+    select name, setCode, number, rarity, types
+    from cards
+    where
+      setCode = ?
+      and number = ?
+  `);
+
   parsedMainBoardCards.forEach((card) => {
-    const loadedCard = getFromDatabase(loadCardQuery(card));
+    const loadedCard = loadCardQuery.get(card.setCode, card.cardNumber);
 
     if (loadedCard) {
+      // eslint-disable-next-line no-param-reassign
       card.rarity = loadedCard.rarity;
+      // eslint-disable-next-line no-param-reassign
       card.types = loadedCard.types;
     } else {
       card.errors.push('I could not find that card in the database.');
@@ -37,16 +31,20 @@ function loadCards(parsedMainBoardCards, parsedSideBoardCards) {
   });
 
   parsedSideBoardCards.forEach((card) => {
-    const loadedCard = getFromDatabase(loadCardQuery(card));
+    const loadedCard = loadCardQuery.get(card.setCode, card.cardNumber);
 
     if (loadedCard) {
+      // eslint-disable-next-line no-param-reassign
       card.rarity = loadedCard.rarity;
+      // eslint-disable-next-line no-param-reassign
       card.types = loadedCard.types;
     } else {
       card.errors.push('I could not find that card in the database.');
     }
 
+    // eslint-disable-next-line no-param-reassign
     card.rarity = loadedCard.rarity;
+    // eslint-disable-next-line no-param-reassign
     card.types = loadedCard.types;
     loadedSideBoardCards.push(card);
   });
@@ -61,7 +59,7 @@ function parsedCardsFromRawLines(rawDataArray) {
 
   let sideBoardFound = false;
   rawDataArray.forEach((rawLine) => {
-    cardExtract = cardRegex.exec(rawLine);
+    const cardExtract = cardRegex.exec(rawLine);
     if (cardExtract) {
       const card = cardExtract.groups;
       card.errors = [];
@@ -97,7 +95,7 @@ function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
 
 function checkCardsAreFromSet(allCardsInDeck, approvedSet) {
   allCardsInDeck.forEach((card) => {
-    if (card.setCode != approvedSet && card.types.trim().toLowerCase() != 'land') {
+    if (card.setCode !== approvedSet && card.types.trim().toLowerCase() !== 'land') {
       const cardFromApprovedSet = checkIfSameCardExistsInAllowedSet(card, approvedSet);
       if (cardFromApprovedSet === undefined) {
         card.errors.push(`Only cards from ${approvedSet} are allowed. ${card.cardName} is from ${card.setCode}`);
@@ -133,10 +131,18 @@ function checkRarity(allCardsInDeck, rarities, maxNumForRarities, maxNumOfEachCa
 }
 
 function readAndParseAndLoadDeck(rawData) {
+  // console.log(rawData);
   const [parsedMainBoardCards, parsedSideBoardCards] = parsedCardsFromRawLines(rawData.split('\n'));
+  console.log(`parsed ${parsedMainBoardCards.length + parsedSideBoardCards.length} cards`);
 
-  const [loadedMainBoardCards, loadedSideBoardCards] = loadCards(parsedMainBoardCards, parsedSideBoardCards);
+  const [loadedMainBoardCards, loadedSideBoardCards] = loadCards(
+    parsedMainBoardCards,
+    parsedSideBoardCards,
+  );
+
   const allCardsInDeck = loadedMainBoardCards.concat(loadedSideBoardCards);
+
+  console.log(`loaded ${allCardsInDeck.length} cards`);
 
   return { allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards };
 }
@@ -151,7 +157,8 @@ function checkDeck(deck) {
   checkCardsAreFromSet(allCardsInDeck, approvedSet);
 
   // at least 40 cards in main deck
-  const numberOfMainDeckCards = loadedMainBoardCards.reduce((sum, c) => sum + Number(c.cardCount), 0);
+  const numberOfMainDeckCards = loadedMainBoardCards
+    .reduce((sum, c) => sum + Number(c.cardCount), 0);
   if (numberOfMainDeckCards < minNumberOfMainDeckCards) {
     deckErrors.push(`You have too few cards in your mainboard. The minimum is ${minNumberOfMainDeckCards} but you have ${numberOfMainDeckCards}`);
   }
@@ -160,16 +167,18 @@ function checkDeck(deck) {
   // 6 uncommons, 2 of each
   deckErrors.push(...checkRarity(loadedMainBoardCards, ['uncommon'], 6, 2));
   // 8 card sideboard (no rarity restrictions)
-  const numberOfSideboardCards = loadedSideBoardCards.reduce((sum, c) => sum + Number(c.cardCount), 0);
+  const numberOfSideboardCards = loadedSideBoardCards
+    .reduce((sum, c) => sum + Number(c.cardCount), 0);
   if (numberOfSideboardCards > maxNumberOfSideboardCards) {
     deckErrors.push(`You have too many cards in your sideboard. The max is ${maxNumberOfSideboardCards} but you have ${numberOfSideboardCards}`);
   }
 
+  const allErrors = [];
   if (deckErrors.length > 0) {
     console.log(
-      `There were errors with your deck:\n${
-      deckErrors.join('\n')}`,
+      `There were errors with your deck:\n${deckErrors.join('\n')}`,
     );
+    allErrors.push(...deckErrors);
   }
 
   const erroneousCards = allCardsInDeck.filter((c) => c.errors.length > 0);
@@ -177,20 +186,35 @@ function checkDeck(deck) {
 
   if (uniqErroneousCards.length > 0) {
     console.log(
-      `There were errors with some cards in your deck:\n${
-      uniqErroneousCards.join('\n')}`,
+      `There were errors with some cards in your deck:\n${uniqErroneousCards.join('\n')}`,
     );
+    allErrors.push(...uniqErroneousCards);
   }
+
+  return allErrors;
 }
 
 module.exports = {
-  name: 'ping',
-  description: 'Ping!',
-  aliases: ['upvote'],
-  secret_aliases: ['upboat'],
+  name: 'curiosity',
+  description: 'Check deck export from MTG Arena against curiosity rules',
+  usage: 'curiosity [deck list]',
+  examples: [
+    'curiosity\n'
+    + '2 Drowsing Tyrannodon (M21) 178\n'
+    + '8 Plains (IKO) 262\n'
+    + '2 Pridemalkin(M21) 196',
+  ],
   async execute(messageContent) {
+    console.log('checking deck');
     const deck = readAndParseAndLoadDeck(messageContent);
 
-    checkDeck(deck);
+    const allErrors = checkDeck(deck);
+    if (allErrors.length > 0) {
+      // eslint-disable-next-line prefer-template
+      return '❌ This deck does not meet the Curiosity format ❌\n'
+        + 'Errors:\n'
+        + allErrors.join('\n');
+    }
+    return '✅ Deck is valid for Curiosity! ✅';
   },
 };
