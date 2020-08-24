@@ -32,7 +32,7 @@ describe('handleMessageContent', () => {
 
         const expectedErrorText = '❌ This deck does not meet the Curiosity format ❌\n'
           + 'Errors:\n'
-          + "You have too many uncommon cards in your mainboard. You can only have 2 uncommon cards but you have 8 in your deck: `Teferi's Tutelage(2)`, `Pestilent Haze(2)`, `Eliminate(2)`, `Miscast(2)`";
+          + "You have too many uncommon cards in your mainboard. You can only have 6 uncommon cards but you have 8 in your deck: `Teferi's Tutelage(2)`, `Pestilent Haze(2)`, `Eliminate(2)`, `Miscast(2)`";
 
         assert.equal(expectedErrorText, await handleMessageContent(`$curiosity ${rawData} `));
       });
