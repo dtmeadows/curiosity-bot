@@ -1,0 +1,6 @@
+node_modules/
+fossil-bro-bot.code-workspace
+*.sqlite
+.vscode
+*.exe
+*.sqlite-*

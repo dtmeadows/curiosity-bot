@@ -1,0 +1,28 @@
+Deck
+1 Terror of the Peaks (M21) 164
+8 Forest (ANB) 112
+1 Elder Gargaroth (M21) 179
+5 Mountain (ANB) 114
+2 Garruk's Uprising (M21) 186
+2 Leafkin Avenger (M21) 220
+1 Palladium Myr (M21) 234
+1 Wildwood Scourge (M21) 214
+1 Colossal Dreadmaw (M21) 176
+4 Turret Ogre (M21) 169
+2 Scorching Dragonfire (M21) 158
+2 Gnarled Sage (M21) 187
+1 Shock (M21) 159
+2 Drowsing Tyrannodon (M21) 178
+4 Rugged Highlands (M21) 249
+1 Snarespinner (M21) 207
+1 Llanowar Visionary (M21) 193
+1 Portcullis Vine (M21) 195
+
+Sideboard
+2 Shock (M21) 159
+1 Heartfire Immolator (M21) 150
+1 Scorching Dragonfire (M21) 158
+1 Return to Nature (M21) 200
+1 Brash Taunter (M21) 133
+1 Radha, Heart of Keld (M21) 224
+1 Thrashing Brontodon (M21) 209
