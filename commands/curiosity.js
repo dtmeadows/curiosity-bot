@@ -110,16 +110,17 @@ function checkCardsAreFromSet(allCardsInDeck, approvedSet) {
   });
 }
 
-function checkRarity(allCardsInDeck, rarities, maxNumForRarities, maxNumOfEachCard) {
+function checkRarity(allCardsInDeck, rarities, requiredNumForRarity, maxNumOfEachCard) {
   const errors = [];
   const cardsInRarity = allCardsInDeck.filter((c) => rarities.includes(c.rarity));
 
   const numForRarities = cardsInRarity.reduce((sum, c) => sum + Number(c.cardCount), 0);
 
-  if (numForRarities > maxNumForRarities) {
+  if (numForRarities !== requiredNumForRarity) {
+    const tooMany = numForRarities > requiredNumForRarity;
     errors.push(
-      `You have too many ${rarities.join(' or ')} cards in your mainboard. `
-      + `You can only have ${maxNumForRarities} ${rarities.join(' or ')} cards but you have ${numForRarities} in your deck: ${cardsInRarity.map((c) => `\`${c.cardName}(${c.cardCount})\``).join(', ')}`,
+      `You have ${tooMany ? 'too many' : 'too few'} ${rarities.join(' or ')} cards in your mainboard. `
+      + `You ${tooMany ? 'can only' : 'must'} have ${requiredNumForRarity} ${rarities.join(' or ')} cards but you have ${numForRarities} in your deck: ${cardsInRarity.map((c) => `\`${c.cardName}(${c.cardCount})\``).join(', ')}`,
     );
   }
 
