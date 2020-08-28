@@ -1,10 +1,18 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
 
-router.get('/', function (req, res) {
+const router = express.Router();
+
+router.get('/', (req, res) => {
   res.render('index', {
-    title: 'Curiosity deck check'
+
+    title: 'Curiosity deck check',
+
   });
+});
+
+router.post('/deck-check', (req, res) => {
+  console.log(`body: ${JSON.stringify(req.body)}`);
+  res.send('heard from /deck-deck');
 });
 
 module.exports = router;

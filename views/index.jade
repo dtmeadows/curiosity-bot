@@ -1,5 +1,19 @@
 extends layout
 
 block content
+  script(src='http://code.jquery.com/jquery-1.9.1.js')
+  script(src='/js/deck_check.js')
   h1= title
-  p Welcome to #{title}
+  div.input
+      span.label Input your deck here
+      br
+      textarea#deck-input(cols="40", rows="5")
+        |2 Drowsing Tyrannodon (M21) 178
+        |8 Plains (IKO) 262
+        |2 Pridemalkin (M21) 196
+        |3 Anointed Chorister (M21) 4
+        |4 Forest (IKO) 274
+        |1 Basri's Acolyte (M21) 8
+  div.actions
+    button(onClick='checkDeck()') check my deck
+
