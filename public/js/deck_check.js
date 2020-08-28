@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 function checkDeck() {
   console.log('deck check');
 

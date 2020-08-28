@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "license": "ISC",
-  "main": "index.js",
+  "main": "discord_bot.js",
   "scripts": {
     "test": "mocha --recursive",
     "start": "node ./bin/www"
