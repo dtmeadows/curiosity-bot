@@ -13,7 +13,7 @@ describe('help', () => {
   });
 
   describe('with args', () => {
-    it('it provides help on a specific command', async () => {
+    it('it provides help on a specific command: ping', async () => {
       const expectedMessage = 'Name: `ping`\n'
         + 'Aliases: ``\n'
         + 'Description: `Ping!`';
@@ -21,7 +21,7 @@ describe('help', () => {
       assert.equal(expectedMessage, await help.execute('ping'));
     });
 
-    it('it provides help on a specific command', async () => {
+    it('it provides help on a specific command: curiosity', async () => {
       const expectedMessage = 'Name: `curiosity`\n'
         + 'Description: `Check deck export from MTG Arena against curiosity rules`\n'
         + 'Usage: `curiosity [deck list]`\n'

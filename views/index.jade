@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+  script(src='/js/deck_check.js')
+  h1= title
+  div.input
+      span.label Input your deck here
+      br
+      textarea#deck-input(cols="100", rows="5", oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"')
+        |2 Drowsing Tyrannodon (M21) 178
+        |8 Plains (IKO) 262
+        |2 Pridemalkin (M21) 196
+        |3 Anointed Chorister (M21) 4
+        |4 Forest (IKO) 274
+        |1 Basri's Acolyte (M21) 8
+  div.actions
+    button(onClick='checkDeck()') check my deck
+  div.input
+    span.label Deck check results
+    br
+    textarea#deck-check-results(cols="100", rows="5", disabled="disabled", hidden, oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"')
