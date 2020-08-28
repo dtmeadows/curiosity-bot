@@ -27,7 +27,7 @@ describe('checkDeck', () => {
     const baseDeck = fs.readFileSync(sampleFile, 'utf8');
 
     it('return an error if you have too many of a rarity', async () => {
-      const modifiedDeck = baseDeck.replace('1 Basri Ket (M21) 7', '2 Basri Ket (M21) 7')
+      const modifiedDeck = baseDeck.replace('1 Basri Ket (M21) 7', '2 Basri Ket (M21) 7');
       assert.match(await checkDeck.execute(modifiedDeck), /You can only have 2 rare or mythic cards but you have 3 in your deck/);
     });
 
