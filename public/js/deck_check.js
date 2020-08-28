@@ -27,3 +27,8 @@ function checkDeck() {
     alert(`Request failed: ${textStatus}`);
   });
 }
+
+$('textarea').on('input change start', function () {
+  this.style.height = '';
+  this.style.height = `${this.scrollHeight}px`;
+});
