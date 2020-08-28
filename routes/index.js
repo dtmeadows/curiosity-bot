@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const Curiosity = require('../commands/curiosity');
+
 router.get('/', (req, res) => {
   res.render('index', {
 
@@ -11,8 +13,14 @@ router.get('/', (req, res) => {
 });
 
 router.post('/deck-check', (req, res) => {
-  console.log(`body: ${JSON.stringify(req.body)}`);
-  res.send('heard from /deck-deck');
+  const deckInput = req.body.deck;
+  console.log(deckInput);
+
+  Curiosity.execute(deckInput).then((deckCheckResults) => {
+    console.log(deckCheckResults);
+    res.set('Content-Type', 'text/plain');
+    res.send(deckCheckResults);
+  });
 });
 
 module.exports = router;

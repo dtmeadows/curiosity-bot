@@ -2,21 +2,28 @@ function checkDeck() {
   console.log('deck check');
 
   const deckInput = $('textarea#deck-input').val();
+  const deckCheckResultsTextArea = $('textarea#deck-check-results');
+
+  deckCheckResultsTextArea.val('');
+  deckCheckResultsTextArea.hide();
 
   console.log(deckInput);
 
-  const data = {
-    deck: deckInput,
-    otherKey: 'a',
-  };
-
-  const request = $.ajax({ url: '/deck-check', type: 'POST', data: JSON.stringify(data) });
-
-  request.done(() => {
+  $.ajax({
+    url: '/deck-check',
+    type: 'POST',
+    data: JSON.stringify({
+      deck: deckInput,
+    }),
+    contentType: 'application/json',
+  }).done((response) => {
     console.log('sucessfull request');
-  });
-
-  request.fail((jqXHR, textStatus) => {
+    console.log(response);
+    deckCheckResultsTextArea.val(
+      response,
+    );
+    deckCheckResultsTextArea.show();
+  }).fail((jqXHR, textStatus) => {
     alert(`Request failed: ${textStatus}`);
   });
 }
