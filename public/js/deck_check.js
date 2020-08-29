@@ -1,5 +1,3 @@
-import autosize from 'autosize';
-
 // eslint-disable-next-line no-unused-vars
 function checkDeck() {
   const deckInput = $('textarea#deck-input').val();
@@ -24,5 +22,3 @@ function checkDeck() {
     console.error(`Request failed: ${textStatus}`);
   });
 }
-
-autosize($('textarea'));
