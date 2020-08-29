@@ -1,14 +1,12 @@
+import autosize from 'autosize';
+
 // eslint-disable-next-line no-unused-vars
 function checkDeck() {
-  console.log('deck check');
-
   const deckInput = $('textarea#deck-input').val();
-  const deckCheckResultsTextArea = $('textarea#deck-check-results');
+  const deckCheckResults = $('#deck-check-results');
 
-  deckCheckResultsTextArea.val('');
-  deckCheckResultsTextArea.hide();
-
-  console.log(deckInput);
+  deckCheckResults.children('textarea').val('').change();
+  deckCheckResults.hide();
 
   $.ajax({
     url: '/deck-check',
@@ -18,18 +16,13 @@ function checkDeck() {
     }),
     contentType: 'application/json',
   }).done((response) => {
-    console.log('sucessfull request');
-    console.log(response);
-    deckCheckResultsTextArea.val(
+    deckCheckResults.children('textarea').val(
       response,
-    );
-    deckCheckResultsTextArea.show();
+    ).change();
+    deckCheckResults.show();
   }).fail((jqXHR, textStatus) => {
-    alert(`Request failed: ${textStatus}`);
+    console.error(`Request failed: ${textStatus}`);
   });
 }
 
-$('textarea').on('input change start', function () {
-  this.style.height = '';
-  this.style.height = `${this.scrollHeight}px`;
-});
+autosize($('textarea'));
