@@ -4,10 +4,17 @@ block content
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
   script(src='/js/deck_check.js')
   h1= title
+  p Curiosity Format is a combination of Limited and Constructed. 40-card Deck Requirements:
+    ul
+      li All cards must come from the same set (Current Season Set: M21)
+      li 2 Rare/Mythic (1 and only 1 of each) 
+      li 6 Uncommon (no more than 2 of each) 
+      li 4 max each common (including common lands)
+      li 8 card sideboard (no rarity restrictions, but deck must meet the above requirements after sideboarding)
   div.input
-      span.label Input your deck here
+      span.label Add your deck here from MTG Arena to see if it meets the format.
       br
-      textarea#deck-input(cols="100", rows="5", oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"')
+      textarea#deck-input(cols="100", rows="5")
         |2 Drowsing Tyrannodon (M21) 178
         |8 Plains (IKO) 262
         |2 Pridemalkin (M21) 196
@@ -16,7 +23,7 @@ block content
         |1 Basri's Acolyte (M21) 8
   div.actions
     button(onClick='checkDeck()') check my deck
-  div.input
+  div.input#deck-check-results(hidden)
     span.label Deck check results
     br
-    textarea#deck-check-results(cols="100", rows="5", disabled="disabled", hidden, oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"')
+    textarea(cols="100", rows="5", disabled="disabled")
