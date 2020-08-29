@@ -35,5 +35,10 @@ describe('checkDeck', () => {
       const modifiedDeck = baseDeck.replace('2 Wildwood Scourge (M21) 214', '1 Wildwood Scourge (M21) 214');
       assert.match(await checkDeck.execute(modifiedDeck), /You must have 6 uncommon cards but you have 5 in your deck/);
     });
+
+    it('does not return an error if you have >4 of a basic land', async () => {
+      const modifiedDeck = baseDeck.replace('4 Forest (IKO) 274', '8 Forest (IKO) 274');
+      assert.equal('✅ Deck is valid for Curiosity! ✅', await checkDeck.execute(modifiedDeck));
+    });
   });
 });

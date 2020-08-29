@@ -115,8 +115,9 @@ function checkRarity(allCardsInDeck, rarities, requiredNumForRarity, maxNumOfEac
   const cardsInRarity = allCardsInDeck.filter((c) => rarities.includes(c.rarity));
 
   const numForRarities = cardsInRarity.reduce((sum, c) => sum + Number(c.cardCount), 0);
+  const ignoreRequiredNumForRarity = requiredNumForRarity === -1;
 
-  if (numForRarities !== requiredNumForRarity) {
+  if (!ignoreRequiredNumForRarity && numForRarities !== requiredNumForRarity) {
     const tooMany = numForRarities > requiredNumForRarity;
     errors.push(
       `You have ${tooMany ? 'too many' : 'too few'} ${rarities.join(' or ')} cards in your mainboard. `
@@ -124,7 +125,7 @@ function checkRarity(allCardsInDeck, rarities, requiredNumForRarity, maxNumOfEac
     );
   }
 
-  const cardsOverMaxNumOfEachCard = cardsInRarity.filter((c) => c.cardCount > maxNumOfEachCard);
+  const cardsOverMaxNumOfEachCard = cardsInRarity.filter((c) => c.types.trim().toLowerCase() !== 'land' && c.cardCount > maxNumOfEachCard);
 
   cardsOverMaxNumOfEachCard.forEach((c) => c.errors.push(
     `You have too many \`${c.cardName}\` cards in your mainboard. For ${rarities.join(' or ')} cards you can only have ${maxNumOfEachCard} card(s) of the same type but you have ${c.cardCount} in your deck.`,
@@ -170,6 +171,8 @@ function checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards) {
   deckErrors.push(...checkRarity(loadedMainBoardCards, ['rare', 'mythic'], 2, 1));
   // 6 uncommons, 2 of each
   deckErrors.push(...checkRarity(loadedMainBoardCards, ['uncommon'], 6, 2));
+  // unlimited commons, 4 max of each
+  deckErrors.push(...checkRarity(loadedMainBoardCards, ['common'], -1, 4));
   // 8 card sideboard (no rarity restrictions)
   const numberOfSideboardCards = loadedSideBoardCards
     .reduce((sum, c) => sum + Number(c.cardCount), 0);

@@ -1,5 +1,4 @@
 extends layout
-
 block content
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
   script(src='/js/deck_check.js')
@@ -21,9 +20,26 @@ block content
         |3 Anointed Chorister (M21) 4
         |4 Forest (IKO) 274
         |1 Basri's Acolyte (M21) 8
+        |2 Conclave Mentor (M21) 216
+        |2 Hunter's Edge (M21) 189
+        |1 Basri's Lieutenant (M21) 9
+        |2 Basri's Solidarity (M21) 10
+        |4 Feat of Resistance (M21) 19
+        |1 Setessan Training (M21) 205
+        |3 Swift Response (M21) 40
+        |1 Basri Ket (M21) 7
+        |4 Blossoming Sands (M20) 243
+        |1 Forest (M21) 272
+        |2 Wildwood Scourge (M21) 214
+        | 
+        |Sideboard
+        |2 Return to Nature (M21) 200
+        |1 Swift Response (M21) 40
+        |2 Run Afoul (M21) 201
+        |2 Seasoned Hallowblade (M21) 34
   div.actions
     button(onClick='checkDeck()') check my deck
   div.input#deck-check-results(hidden)
     span.label Deck check results
     br
-    textarea(cols="100", rows="5", disabled="disabled")
+    textarea(cols="100", rows="5")
