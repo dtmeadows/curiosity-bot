@@ -40,5 +40,10 @@ describe('checkDeck', () => {
       const modifiedDeck = baseDeck.replace('4 Forest (IKO) 274', '8 Forest (IKO) 274');
       assert.equal('✅ Deck is valid for Curiosity! ✅', await checkDeck.execute(modifiedDeck));
     });
+
+    it('does return an error if you have >4 of a non-basic land', async () => {
+      const modifiedDeck = baseDeck.replace('4 Blossoming Sands (M20) 243', '8 Blossoming Sands (M20) 243');
+      assert.match(await checkDeck.execute(modifiedDeck), /You have too many `Blossoming Sands` cards in your mainboard\. For common cards you can only have 4 card\(s\) of the same type but you have 8 in your deck\./);
+    });
   });
 });

@@ -3,50 +3,47 @@ const Database = require('better-sqlite3');
 const db = new Database('./AllPrintings.sqlite');
 db.pragma('journal_mode = WAL');
 
-function loadCards(parsedMainBoardCards, parsedSideBoardCards) {
-  const loadedMainBoardCards = [];
-  const loadedSideBoardCards = [];
+const loadCardQuery = db.prepare(`
+select 
+  name, 
+  setCode, 
+  number, 
+  rarity, 
+  types, -- eg Creature, Enchantment, Land, Sorcery, etc
+  supertypes -- eg nil, Basic, Legendary 
+from cards
+where
+  setCode = ?
+  and number = ?
+`);
 
-  const loadCardQuery = db.prepare(`
-    select name, setCode, number, rarity, types
-    from cards
-    where
-      setCode = ?
-      and number = ?
-  `);
+function loadCard(card) {
+  const loadedCard = loadCardQuery.get(card.setCode, card.cardNumber);
 
-  parsedMainBoardCards.forEach((card) => {
-    const loadedCard = loadCardQuery.get(card.setCode, card.cardNumber);
-
-    if (loadedCard) {
-      // eslint-disable-next-line no-param-reassign
-      card.rarity = loadedCard.rarity;
-      // eslint-disable-next-line no-param-reassign
-      card.types = loadedCard.types;
-    } else {
-      card.errors.push('I could not find that card in the database.');
-    }
-
-    loadedMainBoardCards.push(card);
-  });
-
-  parsedSideBoardCards.forEach((card) => {
-    const loadedCard = loadCardQuery.get(card.setCode, card.cardNumber);
-
-    if (loadedCard) {
-      // eslint-disable-next-line no-param-reassign
-      card.rarity = loadedCard.rarity;
-      // eslint-disable-next-line no-param-reassign
-      card.types = loadedCard.types;
-    } else {
-      card.errors.push('I could not find that card in the database.');
-    }
-
+  if (loadedCard) {
     // eslint-disable-next-line no-param-reassign
     card.rarity = loadedCard.rarity;
     // eslint-disable-next-line no-param-reassign
     card.types = loadedCard.types;
-    loadedSideBoardCards.push(card);
+    // eslint-disable-next-line no-param-reassign
+    card.supertypes = loadedCard.supertypes;
+  } else {
+    card.errors.push('I could not find that card in the database.');
+  }
+
+  return card;
+}
+
+function loadCards(parsedMainBoardCards, parsedSideBoardCards) {
+  const loadedMainBoardCards = [];
+  const loadedSideBoardCards = [];
+
+  parsedMainBoardCards.forEach((card) => {
+    loadedMainBoardCards.push(loadCard(card));
+  });
+
+  parsedSideBoardCards.forEach((card) => {
+    loadedSideBoardCards.push(loadCard(card));
   });
 
   return [loadedMainBoardCards, loadedSideBoardCards];
@@ -95,13 +92,18 @@ function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
   return db.prepare(query).get();
 }
 
+function cardIsBasicLand(card) {
+  return card.types.trim().toLowerCase() === 'land'
+    && card.supertypes
+    && card.supertypes.trim().toLowerCase() === 'basic';
+}
+
 function checkCardsAreFromSet(allCardsInDeck, approvedSet) {
   allCardsInDeck.forEach((card) => {
-    if (card.setCode !== approvedSet && card.types.trim().toLowerCase() !== 'land') {
+    if (card.setCode !== approvedSet && !cardIsBasicLand(card)) {
       const cardFromApprovedSet = checkIfSameCardExistsInAllowedSet(card, approvedSet);
       if (cardFromApprovedSet === undefined) {
         card.errors.push(`Only cards from ${approvedSet} are allowed. ${card.cardName} is from ${card.setCode}`);
-        console.log(card);
       } else {
         card.notices.push(`Replaced ${card.cardName} from ${card.setCode} with the same card found in ${approvedSet}`);
         Object.assign(card, cardFromApprovedSet);
@@ -125,7 +127,8 @@ function checkRarity(allCardsInDeck, rarities, requiredNumForRarity, maxNumOfEac
     );
   }
 
-  const cardsOverMaxNumOfEachCard = cardsInRarity.filter((c) => c.types.trim().toLowerCase() !== 'land' && c.cardCount > maxNumOfEachCard);
+  // eslint-disable-next-line max-len
+  const cardsOverMaxNumOfEachCard = cardsInRarity.filter((c) => !cardIsBasicLand(c) && c.cardCount > maxNumOfEachCard);
 
   cardsOverMaxNumOfEachCard.forEach((c) => c.errors.push(
     `You have too many \`${c.cardName}\` cards in your mainboard. For ${rarities.join(' or ')} cards you can only have ${maxNumOfEachCard} card(s) of the same type but you have ${c.cardCount} in your deck.`,
@@ -135,7 +138,6 @@ function checkRarity(allCardsInDeck, rarities, requiredNumForRarity, maxNumOfEac
 }
 
 function readAndParseAndLoadDeck(rawData) {
-  // console.log(rawData);
   const [parsedMainBoardCards, parsedSideBoardCards, parsingErrors] = parsedCardsFromRawLines(rawData.split('\n'));
   console.log(`parsed ${parsedMainBoardCards.length + parsedSideBoardCards.length} cards`);
 
@@ -182,9 +184,6 @@ function checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards) {
 
   const allErrors = [];
   if (deckErrors.length > 0) {
-    console.log(
-      `There were errors with your deck:\n${deckErrors.join('\n')}`,
-    );
     allErrors.push(...deckErrors);
   }
 
@@ -192,9 +191,6 @@ function checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards) {
   const uniqErroneousCards = [...new Set(erroneousCards.map((c) => c.errors))];
 
   if (uniqErroneousCards.length > 0) {
-    console.log(
-      `There were errors with some cards in your deck:\n${uniqErroneousCards.join('\n')}`,
-    );
     allErrors.push(...uniqErroneousCards);
   }
 
