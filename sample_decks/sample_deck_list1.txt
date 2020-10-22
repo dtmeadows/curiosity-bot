@@ -1,25 +1,21 @@
 Deck
-4 Lofty Denial (M21) 56
-4 Bloodfell Caves (M21) 243
-2 Kitesail Freebooter (M21) 107
-1 Mountain (ANB) 114
-2 Eliminate (M21) 97
-4 Fetid Imp (M21) 98
-2 Bad Deal (M21) 89
-2 Spellgorger Weird (M21) 161
-1 Island (ANB) 113
-3 Scorching Dragonfire (M21) 158
-1 Terror of the Peaks (M21) 164
-4 Swiftwater Cliffs (M21) 251
-4 Dismal Backwater (M21) 245
-3 Swamp (ANB) 116
-2 Opt (M21) 59
-1 Teferi, Master of Time (M21) 75
+1 Magmatic Channeler (ZNR) 148
+10 Island (ANB) 113
+6 Mountain (ANB) 114
+2 Umara Wizard (ZNR) 86
+2 Roost of Drakes (ZNR) 74
+2 Rockslide Sorcerer (ZNR) 154
+4 Cunning Geysermage (ZNR) 55
+4 Tazeem Roilmage (ZNR) 84
+1 Coralhelm Chronicler (ZNR) 54
+4 Roil Eruption (ZNR) 155
+1 Expedition Diviner (ZNR) 57
+3 Bubble Snare (ZNR) 47
 
 Sideboard
-1 Chandra, Heart of Fire (M21) 135
-1 Massacre Wurm (M21) 114
-1 Liliana, Waker of the Dead (M21) 108
-1 Sublime Epiphany (M21) 74
-2 Riddleform (M21) 64
-2 Cancel (M21) 46
+1 Roiling Vortex (ZNR) 156
+1 Relic Robber (ZNR) 153
+2 Cinderclasm (ZNR) 136
+2 Risen Riptide (ZNR) 73
+1 Expedition Diviner (ZNR) 57
+1 Fissure Wizard (ZNR) 140
