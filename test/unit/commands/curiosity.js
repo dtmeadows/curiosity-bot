@@ -27,22 +27,22 @@ describe('checkDeck', () => {
     const baseDeck = fs.readFileSync(sampleFile, 'utf8');
 
     it('return an error if you have too many of a rarity', async () => {
-      const modifiedDeck = baseDeck.replace('1 Basri Ket (M21) 7', '2 Basri Ket (M21) 7');
+      const modifiedDeck = baseDeck.replace('1 Charix, the Raging Isle (ZNR) 49', '2 Charix, the Raging Isle (ZNR) 49');
       assert.match(await checkDeck.execute(modifiedDeck), /You can only have 2 rare or mythic cards but you have 3 in your deck/);
     });
 
     it('return an error if you have too few of a rarity', async () => {
-      const modifiedDeck = baseDeck.replace('2 Wildwood Scourge (M21) 214', '1 Wildwood Scourge (M21) 214');
+      const modifiedDeck = baseDeck.replace('2 Merfolk Windrobber (ZNR) 70', '1 Merfolk Windrobber (ZNR) 70');
       assert.match(await checkDeck.execute(modifiedDeck), /You must have 6 uncommon cards but you have 5 in your deck/);
     });
 
     it('does not return an error if you have >4 of a basic land', async () => {
-      const modifiedDeck = baseDeck.replace('4 Forest (IKO) 274', '8 Forest (IKO) 274');
+      const modifiedDeck = baseDeck.replace('16 Island (ANB) 113', '16 Island (ANB) 113');
       assert.equal('✅ Deck is valid for Curiosity! ✅', await checkDeck.execute(modifiedDeck));
     });
 
     it('does return an error if you have >4 of a non-basic land', async () => {
-      const modifiedDeck = baseDeck.replace('4 Blossoming Sands (M20) 243', '8 Blossoming Sands (M20) 243');
+      const modifiedDeck = baseDeck.replace('16 Island (ANB) 113', '8 Blossoming Sands (M21) 243');
       assert.match(await checkDeck.execute(modifiedDeck), /You have too many `Blossoming Sands` cards in your mainboard\. For common cards you can only have 4 card\(s\) of the same type but you have 8 in your deck\./);
     });
   });

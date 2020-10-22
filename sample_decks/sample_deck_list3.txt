@@ -1,23 +1,22 @@
-2 Drowsing Tyrannodon (M21) 178
-8 Plains (IKO) 262
-2 Pridemalkin (M21) 196
-3 Anointed Chorister (M21) 4
-4 Forest (IKO) 274
-1 Basri's Acolyte (M21) 8
-2 Conclave Mentor (M21) 216
-1 Hunter's Edge (M21) 189
-1 Basri's Lieutenant (M21) 9
-2 Basri's Solidarity (M21) 10
-4 Feat of Resistance (M21) 19
-2 Swift Response (M21) 40
-1 Basri Ket (M21) 7
-4 Blossoming Sands (M20) 243
-1 Forest (M21) 272
-2 Wildwood Scourge (M21) 214
+Deck
+1 Magmatic Channeler (ZNR) 148
+8 Island (ANB) 113
+6 Mountain (ANB) 114
+2 Umara Wizard (ZNR) 86
+2 Roost of Drakes (ZNR) 74
+2 Rockslide Sorcerer (ZNR) 154
+4 Cunning Geysermage (ZNR) 55
+4 Tazeem Roilmage (ZNR) 84
+1 Coralhelm Chronicler (ZNR) 54
+4 Roil Eruption (ZNR) 155
+1 Expedition Diviner (ZNR) 57
+3 Bubble Snare (ZNR) 47
+2 Merfolk Windrobber (ZNR) 70
 
 Sideboard
-2 Return to Nature (M21) 200
-2 Swift Response (M21) 40
-2 Run Afoul (M21) 201
-1 Pridemalkin (M21) 196
-1 Hunter's Edge (M21) 189
+1 Roiling Vortex (ZNR) 156
+1 Relic Robber (ZNR) 153
+2 Cinderclasm (ZNR) 136
+2 Risen Riptide (ZNR) 73
+1 Expedition Diviner (ZNR) 57
+1 Fissure Wizard (ZNR) 140

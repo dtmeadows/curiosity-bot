@@ -27,9 +27,9 @@ describe('help', () => {
         + 'Usage: `curiosity [deck list]`\n'
         + 'Examples:\n'
         + '\t`curiosity\n'
-        + '2 Drowsing Tyrannodon (M21) 178\n'
-        + '8 Plains (IKO) 262\n'
-        + '2 Pridemalkin(M21) 196`';
+        + '2 Umara Wizard (ZNR) 86\n'
+        + '2 Roost of Drakes (ZNR) 74\n'
+        + '2 Rockslide Sorcerer (ZNR) 154`'; 
 
       assert.equal(expectedMessage, await help.execute('curiosity'));
     });

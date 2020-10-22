@@ -27,18 +27,18 @@ describe('handleMessageContent', () => {
 
     describe('checkDeck', () => {
       it('returns error text', async () => {
-        const samplePath = path.join(__dirname, '../../sample_decks/sample_deck_list4.txt');
+        const samplePath = path.join(__dirname, '../../sample_decks/sample_deck_list3.txt');
         const rawData = fs.readFileSync(samplePath, 'utf8');
 
         const expectedErrorText = '❌ This deck does not meet the Curiosity format ❌\n'
           + 'Errors:\n'
-          + "You have too many uncommon cards in your mainboard. You can only have 6 uncommon cards but you have 8 in your deck: `Teferi's Tutelage(2)`, `Pestilent Haze(2)`, `Eliminate(2)`, `Miscast(2)`";
+          + 'You have too many uncommon cards in your mainboard. You can only have 6 uncommon cards but you have 8 in your deck: `Umara Wizard(2)`, `Roost of Drakes(2)`, `Rockslide Sorcerer(2)`, `Merfolk Windrobber(2)`';
 
         assert.equal(expectedErrorText, await handleMessageContent(`$curiosity ${rawData} `));
       });
 
       it('handles when command and first card are on first line', async () => {
-        const samplePath = path.join(__dirname, '../../sample_decks/sample_deck_list3.txt');
+        const samplePath = path.join(__dirname, '../../sample_decks/sample_deck_list2.txt');
         const rawData = fs.readFileSync(samplePath, 'utf8');
 
         const expectedSuccessText = '✅ Deck is valid for Curiosity! ✅';

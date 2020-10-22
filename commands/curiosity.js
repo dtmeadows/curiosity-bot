@@ -87,9 +87,18 @@ function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
       setCode = '${approvedSet}'
       and name = '${card.cardName}'
   `;
+
   // you could argue we should check if other stuff is equivalent
   // in case somehow someone brought a different version of the card in
-  return db.prepare(query).get();
+  let results;
+  try {
+    results = db.prepare(query).get();
+  } catch (e) {
+    console.log(e);
+    console.log(query);
+  }
+
+  return results;
 }
 
 function cardIsBasicLand(card) {
@@ -156,7 +165,7 @@ function readAndParseAndLoadDeck(rawData) {
 }
 
 function checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards) {
-  const approvedSet = 'M21';
+  const approvedSet = 'ZNR';
   const minNumberOfMainDeckCards = 40;
   const maxNumberOfSideboardCards = 8;
 
@@ -203,9 +212,9 @@ module.exports = {
   usage: 'curiosity [deck list]',
   examples: [
     'curiosity\n'
-    + '2 Drowsing Tyrannodon (M21) 178\n'
-    + '8 Plains (IKO) 262\n'
-    + '2 Pridemalkin(M21) 196',
+    + '2 Umara Wizard (ZNR) 86\n'
+    + '2 Roost of Drakes (ZNR) 74\n'
+    + '2 Rockslide Sorcerer (ZNR) 154',
   ],
   async execute(messageContent) {
     console.log('checking deck');
