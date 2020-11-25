@@ -3,6 +3,16 @@ const Database = require('better-sqlite3');
 const db = new Database('./AllPrintings.sqlite');
 db.pragma('journal_mode = WAL');
 
+// todo move all this DB stuff into it's own file 
+const usedColumns = [
+  'name',
+  'setCode',
+  'number',
+  'rarity',
+  'types',
+  'supertypes',
+];
+
 const loadCardQuery = db.prepare(`
 select 
   name, 
@@ -11,7 +21,7 @@ select
   rarity, 
   types, -- eg Creature, Enchantment, Land, Sorcery, etc
   supertypes -- eg nil, Basic, Legendary 
-from cards
+from usable_cards
 where
   setCode = ?
   and number = ?
@@ -82,7 +92,7 @@ function parsedCardsFromRawLines(rawDataArray) {
 function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
   const query = `
     select name, setCode, number, rarity, types
-    from cards
+    from usable_cards
     where
       setCode = '${approvedSet}'
       and name = '${card.cardName}'
