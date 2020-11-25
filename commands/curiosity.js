@@ -3,16 +3,7 @@ const Database = require('better-sqlite3');
 const db = new Database('./AllPrintings.sqlite');
 db.pragma('journal_mode = WAL');
 
-// todo move all this DB stuff into it's own file 
-const usedColumns = [
-  'name',
-  'setCode',
-  'number',
-  'rarity',
-  'types',
-  'supertypes',
-];
-
+// todo move all this DB stuff into it's own file
 const loadCardQuery = db.prepare(`
 select 
   name, 
@@ -175,6 +166,7 @@ function readAndParseAndLoadDeck(rawData) {
 }
 
 function checkDeck({
+  // todo remove default set code after discord bot is fixed
   allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, setCode = 'ZNR',
 }) {
   // const approvedSets = 'ZNR'; TODO: check this here as well

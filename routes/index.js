@@ -5,6 +5,7 @@ const router = express.Router();
 const Curiosity = require('../commands/curiosity');
 
 router.get('/', (req, res) => {
+  // todo: populate set dropdown via query on sets table
   res.render('index', {
 
     title: 'Curiosity deck check',

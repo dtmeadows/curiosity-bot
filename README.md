@@ -24,6 +24,8 @@ FROM cards;
 DROP TABLE cards; 
 -- add index to usable_cards
 CREATE INDEX idx_setCode_name ON usable_cards (setCode, name);
+-- if you need to update the set drop down list
+select name, code from sets where type = 'expansion' and releaseDate >= '2019-01-01' order by releaseDate desc;
 -- vacuum database to reduce size
 VACUUM;
 ```
