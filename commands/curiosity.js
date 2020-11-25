@@ -164,13 +164,15 @@ function readAndParseAndLoadDeck(rawData) {
   ];
 }
 
-function checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards) {
-  const approvedSet = 'ZNR';
+function checkDeck({
+  allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, setCode = 'ZNR',
+}) {
+  // const approvedSets = 'ZNR'; TODO: check this here as well
   const minNumberOfMainDeckCards = 40;
   const maxNumberOfSideboardCards = 8;
 
   const deckErrors = [];
-  checkCardsAreFromSet(allCardsInDeck, approvedSet);
+  checkCardsAreFromSet(allCardsInDeck, setCode);
 
   // at least 40 cards in main deck
   const numberOfMainDeckCards = loadedMainBoardCards
@@ -216,16 +218,22 @@ module.exports = {
     + '2 Roost of Drakes (ZNR) 74\n'
     + '2 Rockslide Sorcerer (ZNR) 154',
   ],
-  async execute(messageContent) {
-    console.log('checking deck');
+  async execute(deckInput, setCode) {
+    console.log(`checking deck from set: ${setCode}`);
     const allErrors = [];
     const [
       allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, parsingErrors,
-    ] = readAndParseAndLoadDeck(messageContent);
+    ] = readAndParseAndLoadDeck(deckInput);
 
     allErrors.push(...parsingErrors);
 
-    allErrors.push(...checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards));
+    // allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, setCode
+    allErrors.push(...checkDeck({
+      allCardsInDeck,
+      loadedMainBoardCards,
+      loadedSideBoardCards,
+      setCode,
+    }));
 
     if (allErrors.length > 0) {
       // eslint-disable-next-line prefer-template
