@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 function checkDeck() {
   const deckInput = $('textarea#deck-input').val();
+  const setCode = $('select#set-code').val();
   const deckCheckResults = $('#deck-check-results');
 
   const deckCheckTextArea = deckCheckResults.children('textarea');
@@ -13,6 +14,7 @@ function checkDeck() {
     type: 'POST',
     data: JSON.stringify({
       deck: deckInput,
+      set: setCode,
     }),
     contentType: 'application/json',
   }).done((response) => {

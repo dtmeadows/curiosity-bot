@@ -3,6 +3,7 @@ const Database = require('better-sqlite3');
 const db = new Database('./AllPrintings.sqlite');
 db.pragma('journal_mode = WAL');
 
+// todo move all this DB stuff into it's own file
 const loadCardQuery = db.prepare(`
 select 
   name, 
@@ -11,7 +12,7 @@ select
   rarity, 
   types, -- eg Creature, Enchantment, Land, Sorcery, etc
   supertypes -- eg nil, Basic, Legendary 
-from cards
+from usable_cards
 where
   setCode = ?
   and number = ?
@@ -82,7 +83,7 @@ function parsedCardsFromRawLines(rawDataArray) {
 function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
   const query = `
     select name, setCode, number, rarity, types
-    from cards
+    from usable_cards
     where
       setCode = '${approvedSet}'
       and name = '${card.cardName}'
@@ -164,13 +165,16 @@ function readAndParseAndLoadDeck(rawData) {
   ];
 }
 
-function checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards) {
-  const approvedSet = 'ZNR';
+function checkDeck({
+  // todo remove default set code after discord bot is fixed
+  allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, setCode = 'ZNR',
+}) {
+  // const approvedSets = 'ZNR'; TODO: check this here as well
   const minNumberOfMainDeckCards = 40;
   const maxNumberOfSideboardCards = 8;
 
   const deckErrors = [];
-  checkCardsAreFromSet(allCardsInDeck, approvedSet);
+  checkCardsAreFromSet(allCardsInDeck, setCode);
 
   // at least 40 cards in main deck
   const numberOfMainDeckCards = loadedMainBoardCards
@@ -216,16 +220,22 @@ module.exports = {
     + '2 Roost of Drakes (ZNR) 74\n'
     + '2 Rockslide Sorcerer (ZNR) 154',
   ],
-  async execute(messageContent) {
-    console.log('checking deck');
+  async execute(deckInput, setCode) {
+    console.log(`checking deck from set: ${setCode}`);
     const allErrors = [];
     const [
       allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, parsingErrors,
-    ] = readAndParseAndLoadDeck(messageContent);
+    ] = readAndParseAndLoadDeck(deckInput);
 
     allErrors.push(...parsingErrors);
 
-    allErrors.push(...checkDeck(allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards));
+    // allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, setCode
+    allErrors.push(...checkDeck({
+      allCardsInDeck,
+      loadedMainBoardCards,
+      loadedSideBoardCards,
+      setCode,
+    }));
 
     if (allErrors.length > 0) {
       // eslint-disable-next-line prefer-template

@@ -5,14 +5,26 @@ block content
   h1= title
   p Curiosity Format is a combination of Limited and Constructed. 40-card Deck Requirements:
     ul
-      li All cards must come from the same set (Current Season Set: Zendikar [ZNR])
+      li All cards must come from the same set (Current Season Set: `Zendikar Rising`)
       li 2 Rare/Mythic (1 and only 1 of each) 
       li 6 Uncommon (no more than 2 of each) 
       li 4 max each common (including common lands)
       li 8 card sideboard (no rarity restrictions, but deck must meet the above requirements after sideboarding)
   div.input
-      span.label Add your deck here from MTG Arena to see if it meets the format.
+      span.label Which set are you using?
+      select#set-code
+        option(value="ZNR") Zendikar Rising
+        option(value="IKO") Ikoria: Lair of Behemoths
+        option(value="THB") Theros Beyond Death
+        option(value="ELD") Throne of Eldraine
+        option(value="WAR") War of the Spark
+        option(value="RNA") Ravnica Allegiance
       br
+      br
+  div.input
+      span.label Paste your deck here from MTG Arena to see if it meets the format. To copy it in Arena, select the deck and then click "Export".
+      br
+
       textarea#deck-input(cols="100", rows="5")
         |1 Magmatic Channeler (ZNR) 148
         |10 Island (ANB) 113
