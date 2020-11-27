@@ -35,6 +35,14 @@ function loadCard(card) {
   return card;
 }
 
+const loadSupportedSetListQuery = db.prepare(
+  "select name, code from sets where type = 'expansion' and releaseDate >= '2019-01-01' order by releaseDate desc;",
+);
+// todo: we could memoize this since results should never change while running
+function loadSupportedSetList() {
+  return loadSupportedSetListQuery.all();
+}
+
 function loadCards(parsedMainBoardCards, parsedSideBoardCards) {
   const loadedMainBoardCards = [];
   const loadedSideBoardCards = [];
@@ -245,4 +253,5 @@ module.exports = {
     }
     return '✅ Deck is valid for Curiosity! ✅';
   },
+  async getSupportedSetList() { return loadSupportedSetList(); },
 };
