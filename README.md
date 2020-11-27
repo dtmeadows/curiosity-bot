@@ -1,7 +1,5 @@
-# fossil-bro-bot
+# curiosity bot
 TODO list: 
-- [ ] use MTG icons in dropdown
-- [ ] dynamically create drop down of Set options
 - [ ] write script to update database
 - [ ] get discord bot working (needs to dynamically determine the set)
 

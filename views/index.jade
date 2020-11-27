@@ -5,20 +5,20 @@ block content
   h1= title
   p Curiosity Format is a combination of Limited and Constructed. 40-card Deck Requirements:
     ul
-      li All cards must come from the same set (Current Season Set: `Zendikar Rising`)
-      li 2 Rare/Mythic (1 and only 1 of each) 
-      li 6 Uncommon (no more than 2 of each) 
-      li 4 max each common (including common lands)
-      li 8 card sideboard (no rarity restrictions, but deck must meet the above requirements after sideboarding)
+      li All cards must come from the same set (Current Season Set: #[strong Zendikar Rising] #[i(class=['ss', 'ss-znr'])]) 
+      li You must have the exact number of each rarity below: 
+        ul(style='list-style: none; padding-left:10px')
+          li #[i(class='ss ss-ons ss-mythic ss-fw')] 1 Mythic Rare
+          li #[i(class='ss ss-ons ss-rare ss-fw')] 1 Rare
+          li #[i(class='ss ss-ons ss-uncommon ss-fw')] 6 Uncommon: no more than 2 of each
+          li #[i(class='ss ss-ons ss-common ss-fw')] Uncommon: unlimited total, but no more than 4 of each (including common lands)
+      li 8 card sideboard: no rarity restrictions, but deck must meet the above requirements after sideboarding
+    | Head to #[a(href='http://curiositymtg.com') curiositymtg.com] if you want to learn more about the format or sign up to play in our weekly tournament. 
   div.input
       span.label Which set are you using?
       select#set-code
-        option(value="ZNR") Zendikar Rising
-        option(value="IKO") Ikoria: Lair of Behemoths
-        option(value="THB") Theros Beyond Death
-        option(value="ELD") Throne of Eldraine
-        option(value="WAR") War of the Spark
-        option(value="RNA") Ravnica Allegiance
+        each set in supportedSetList
+          option(value=set.code) #{set.name}
       br
       br
   div.input
