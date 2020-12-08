@@ -1,0 +1,21 @@
+Deck
+2 Feed the Swarm (ZNR) 102
+1 Luminarch Aspirant (ZNR) 24
+2 Oblivion's Hunger (ZNR) 119
+2 Kor Celebrant (ZNR) 22
+2 Attended Healer (ZNR) 6
+2 Hagra Constrictor (ZNR) 105
+3 Expedition Healer (ZNR) 13
+2 Blood Beckoning (ZNR) 92
+8 Swamp (UST) 214
+2 Cleric of Life's Bond (ZNR) 222
+8 Plains (UST) 212
+2 Fearless Fledgling (ZNR) 15
+1 Felidar Retreat (ZNR) 16
+2 Vanquish the Weak (ZNR) 131
+1 Subtle Strike (ZNR) 128
+
+Sideboard
+2 Disenchant (ZNR) 10
+2 Kor Celebrant (ZNR) 22
+4 Legion Angel (ZNR) 23
