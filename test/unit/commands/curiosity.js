@@ -32,6 +32,10 @@ describe('checkDeck', () => {
     assert.match(await checkDeck.execute('1 Stormwing Entity (M21)'), new RegExp('unmatched line found: `1 Stormwing Entity \\(M21\\)', 's'));
   });
 
+  it('does return an error if a card cannot be found', async () => {
+    assert.match(await checkDeck.execute('1 Swamp (SLD) 105'), /Unable to find card in database: Swamp \(SLD\) 105/);
+  });
+
   describe('rarities', () => {
     const sampleFile = path.join(__dirname, '../../../sample_decks/valid_decks/sample_deck_list.txt');
     const baseDeck = fs.readFileSync(sampleFile, 'utf8');

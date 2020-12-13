@@ -28,8 +28,10 @@ function loadCard(card) {
     card.types = loadedCard.types;
     // eslint-disable-next-line no-param-reassign
     card.supertypes = loadedCard.supertypes;
+    // eslint-disable-next-line no-param-reassign
+    card.loaded = true;
   } else {
-    card.errors.push('I could not find that card in the database.');
+    card.errors.push(`Unable to find card in database: ${card.cardName} (${card.setCode}) ${card.cardNumber}`);
   }
 
   return card;
@@ -71,6 +73,7 @@ function parsedCardsFromRawLines(rawDataArray) {
       const card = cardExtract.groups;
       card.errors = [];
       card.notices = [];
+      card.loaded = false;
       if (!sideBoardFound) { mainBoardCards.push(card); } else {
         sideBoardCards.push(card);
       }
@@ -111,6 +114,7 @@ function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
 }
 
 function cardIsBasicLand(card) {
+  console.log(card);
   return card.types.trim().toLowerCase() === 'land'
     && card.supertypes
     && card.supertypes.trim().toLowerCase() === 'basic';
@@ -176,12 +180,25 @@ function readAndParseAndLoadDeck(rawData) {
     parsedSideBoardCards,
   );
 
-  const allCardsInDeck = loadedMainBoardCards.concat(loadedSideBoardCards);
+  // const allCardsInDeck = loadedMainBoardCards.concat(loadedSideBoardCards);
+
+  const [
+    allCardsInDeck,
+    cardsNotFoundInDatabase,
+  ] = loadedMainBoardCards.concat(loadedSideBoardCards)
+    .reduce((result, card) => {
+      result[card.loaded ? 0 : 1].push(card);
+      return result;
+    },
+    [[], []]);
 
   console.log(`loaded ${allCardsInDeck.length} cards`);
 
+  const cardsNotFoundInDatabaseErrors = cardsNotFoundInDatabase.map((c) => c.errors)
+
   return [
-    allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, parsingErrors,
+    allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards,
+    parsingErrors, cardsNotFoundInDatabaseErrors,
   ];
 }
 
@@ -244,10 +261,12 @@ module.exports = {
     console.log(`checking deck from set: ${setCode}`);
     const allErrors = [];
     const [
-      allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, parsingErrors,
+      allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, 
+      parsingErrors, cardsNotFoundInDatabaseErrors,
     ] = readAndParseAndLoadDeck(deckInput);
 
     allErrors.push(...parsingErrors);
+    allErrors.push(...cardsNotFoundInDatabaseErrors);
 
     // allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, setCode
     allErrors.push(...checkDeck({
