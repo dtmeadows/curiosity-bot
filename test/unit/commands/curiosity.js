@@ -14,7 +14,16 @@ describe('checkDeck', () => {
       console.log(`checking ${filePath}`);
       const rawData = fs.readFileSync(filePath, 'utf8');
 
-      checkDeck.execute(rawData);
+      // dynamically pull set from first line in test so that we don't have to add new tests
+      // for every set. this is really kinda lazy since we could just parse the line using 
+      // the real parser... 
+      const cardRegex = /\((?<setCode>[A-Z]+)\)/;
+      const lines = rawData.split('\n')
+      console.log(lines)
+      console.log(cardRegex.exec(lines[0]))
+      const setCode = cardRegex.exec(lines[0]).groups.setCode
+      console.log(setCode)
+      checkDeck.execute(rawData, setCode);
     });
   });
 
@@ -43,27 +52,27 @@ describe('checkDeck', () => {
     // TODO: could probably move this into their own fixtures or at least stop repeating so much
     it('return an error if you have too many of a rarity', async () => {
       const modifiedDeck = baseDeck.replace('1 Charix, the Raging Isle (ZNR) 49', '2 Charix, the Raging Isle (ZNR) 49');
-      assert.match(await checkDeck.execute(modifiedDeck), /You can only have 2 rare or mythic cards but you have 3 in your mainboard/);
+      assert.match(await checkDeck.execute(modifiedDeck, 'ZNR'), /You can only have 2 rare or mythic cards but you have 3 in your mainboard/);
     });
 
     it('return an error if you have too few of a rarity', async () => {
       const modifiedDeck = baseDeck.replace('2 Merfolk Windrobber (ZNR) 70', '1 Merfolk Windrobber (ZNR) 70');
-      assert.match(await checkDeck.execute(modifiedDeck), /You must have 6 uncommon cards but you have 5 in your mainboard/);
+      assert.match(await checkDeck.execute(modifiedDeck, 'ZNR'), /You must have 6 uncommon cards but you have 5 in your mainboard/);
     });
 
     it('does not return an error if you have >4 of a basic land', async () => {
       const modifiedDeck = baseDeck.replace('16 Island (ANB) 113', '16 Island (ANB) 113');
-      assert.equal('✅ Deck is valid for Curiosity! ✅', await checkDeck.execute(modifiedDeck));
+      assert.equal('✅ Deck is valid for Curiosity! ✅', await checkDeck.execute(modifiedDeck, 'ZNR'));
     });
 
     it('does return an error if you have >4 of a non-basic land', async () => {
       const modifiedDeck = baseDeck.replace('16 Island (ANB) 113', '8 Blossoming Sands (M21) 243');
-      assert.match(await checkDeck.execute(modifiedDeck), /You have too many `Blossoming Sands` cards in your deck\. For common cards you can only have 4 card\(s\) of the same type but you have 8 in your deck\./);
+      assert.match(await checkDeck.execute(modifiedDeck, 'ZNR'), /You have too many `Blossoming Sands` cards in your deck\. For common cards you can only have 4 card\(s\) of the same type but you have 8 in your deck\./);
     });
 
     it('does return an error if you violate rarity restrictions across main and side board', async () => {
       const modifiedDeck = baseDeck.replace('16 Island (ANB) 113', '8 Blossoming Sands (M21) 243');
-      assert.match(await checkDeck.execute(modifiedDeck), /You have too many `Blossoming Sands` cards in your deck\. For common cards you can only have 4 card\(s\) of the same type but you have 8 in your deck\./);
+      assert.match(await checkDeck.execute(modifiedDeck, 'ZNR'), /You have too many `Blossoming Sands` cards in your deck\. For common cards you can only have 4 card\(s\) of the same type but you have 8 in your deck\./);
     });
   });
 });

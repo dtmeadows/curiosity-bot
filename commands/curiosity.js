@@ -1,5 +1,7 @@
 const Database = require('better-sqlite3');
 
+const CURRENT_SET = 'KLD';
+
 const db = new Database('./AllPrintings.sqlite');
 db.pragma('journal_mode = WAL');
 
@@ -114,7 +116,6 @@ function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
 }
 
 function cardIsBasicLand(card) {
-  console.log(card);
   return card.types.trim().toLowerCase() === 'land'
     && card.supertypes
     && card.supertypes.trim().toLowerCase() === 'basic';
@@ -204,7 +205,7 @@ function readAndParseAndLoadDeck(rawData) {
 
 function checkDeck({
   // todo remove default set code after discord bot is fixed
-  allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, setCode = 'ZNR',
+  allCardsInDeck, loadedMainBoardCards, loadedSideBoardCards, setCode = CURRENT_SET,
 }) {
   // const approvedSets = 'ZNR'; TODO: check this here as well
   const minNumberOfMainDeckCards = 40;
@@ -257,7 +258,7 @@ module.exports = {
     + '2 Roost of Drakes (ZNR) 74\n'
     + '2 Rockslide Sorcerer (ZNR) 154',
   ],
-  async execute(deckInput, setCode) {
+async execute(deckInput, setCode) {
     console.log(`checking deck from set: ${setCode}`);
     const allErrors = [];
     const [
