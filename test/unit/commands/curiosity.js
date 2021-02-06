@@ -33,7 +33,7 @@ describe('checkDeck', () => {
   });
 
   it('does return an error if a card cannot be found', async () => {
-    assert.match(await checkDeck.execute('1 Swamp (SLD) 105'), /Unable to find card in database: Swamp \(SLD\) 105/);
+    assert.match(await checkDeck.execute('1 Swamp (BLAHHH) 105'), /Unable to find card in database: Swamp \(BLAHHH\) 105/);
   });
 
   describe('rarities', () => {

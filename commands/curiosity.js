@@ -274,7 +274,7 @@ module.exports = {
       loadedMainBoardCards,
       loadedSideBoardCards,
       setCode,
-    }));
+  }));
 
     if (allErrors.length > 0) {
       // eslint-disable-next-line prefer-template
