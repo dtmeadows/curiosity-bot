@@ -6,24 +6,44 @@ const path = require('path');
 const checkDeck = require('../../../commands/curiosity.js');
 
 describe('checkDeck', () => {
+  function loadAndCheckDeck(validSampleDir, fileName) {
+    const filePath = path.join(validSampleDir, fileName);
+    const rawData = fs.readFileSync(filePath, 'utf8');
+
+    // look through the decklist to find the most common setCode among them
+    // we should pull this out elsewhere so the discord bot can use it
+    const cardRegex = /\(([A-Z]+)\)/gi;
+    const matches = Array.from(rawData.matchAll(cardRegex)).map(x => x[1])
+
+    const countByMatches = {}
+    matches.map(function(currentValue, index) {
+      if (countByMatches.hasOwnProperty(currentValue)) {
+        countByMatches[currentValue] = countByMatches[currentValue] + 1;
+      } else {
+        countByMatches[currentValue] = 1
+      }
+    });
+
+    console.log(countByMatches)
+    const maxValue = Math.max(...Object.values(countByMatches))
+    const setCode = Object.keys(countByMatches).find(key => countByMatches[key] === maxValue)
+    console.log(setCode)
+
+    return checkDeck.execute(rawData, setCode)
+  }
+
   it('checks valid sample decks', () => {
     const validSampleDir = path.join(__dirname, '../../../sample_decks/valid_decks');
     const fileNames = fs.readdirSync(validSampleDir);
-    fileNames.forEach(async (fileName) => {
-      const filePath = path.join(validSampleDir, fileName);
-      console.log(`checking ${filePath}`);
-      const rawData = fs.readFileSync(filePath, 'utf8');
+    const testResults = fileNames.map(async (fileName) => {
+      return loadAndCheckDeck(validSampleDir, fileName);
+    });
 
-      // dynamically pull set from first line in test so that we don't have to add new tests
-      // for every set. this is really kinda lazy since we could just parse the line using 
-      // the real parser... 
-      const cardRegex = /\((?<setCode>[A-Z]+)\)/;
-      const lines = rawData.split('\n')
-      console.log(lines)
-      console.log(cardRegex.exec(lines[0]))
-      const setCode = cardRegex.exec(lines[0]).groups.setCode
-      console.log(setCode)
-      checkDeck.execute(rawData, setCode);
+    return Promise.all(testResults).then(testResults => {
+      testResults.map(testResult => {
+        // i wish I could get the filename in the error but that messes with promises
+        assert.strictEqual(testResult, '✅ Deck is valid for Curiosity! ✅');
+      })
     });
   });
 

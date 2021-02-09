@@ -98,15 +98,18 @@ function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
     select name, setCode, number, rarity, types
     from usable_cards
     where
-      setCode = '${approvedSet}'
-      and name = '${card.cardName}'
+      setCode = '$approvedSet'
+      and name = '$cardName'
   `;
 
   // you could argue we should check if other stuff is equivalent
   // in case somehow someone brought a different version of the card in
   let results;
   try {
-    results = db.prepare(query).get();
+    results = db.prepare(query).get({
+      approvedSet: approvedSet, 
+      cardName: card.cardName,
+    });
   } catch (e) {
     console.log(e);
     console.log(query);
