@@ -1,7 +1,7 @@
 Deck
 1 Magmatic Channeler (ZNR) 148
 8 Island (ANB) 113
-6 Mountain (ANB) 114
+7 Mountain (ANB) 114
 2 Umara Wizard (ZNR) 86
 2 Roost of Drakes (ZNR) 74
 2 Rockslide Sorcerer (ZNR) 154
@@ -10,8 +10,7 @@ Deck
 1 Coralhelm Chronicler (ZNR) 54
 4 Roil Eruption (ZNR) 155
 1 Expedition Diviner (ZNR) 57
-3 Bubble Snare (ZNR) 47
-2 Merfolk Windrobber (ZNR) 70
+4 Bubble Snare (ZNR) 47
 
 Sideboard
 1 Roiling Vortex (ZNR) 156

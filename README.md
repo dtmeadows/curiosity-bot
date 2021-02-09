@@ -32,6 +32,7 @@ select name, code from sets where type = 'expansion' and releaseDate >= '2019-01
 -- vacuum database to reduce size
 VACUUM;
 ```
-- afterwards make sure `.tables` only lists `cards` and `sets`
-- move db over to git repo and double check size. Should be around 6MB if you've done it correctly
+- afterwards make sure `.tables` only lists `usable_cards` and `sets`
+- move db over to git repo and double check size. Should be under 10MB if you've done it correctly
 - add tests to sample files if needed
+- update `current_sample_deck_list.txt` if the current set has changed and if you need a new example deck. This will update the example deck shown in the textarea. 

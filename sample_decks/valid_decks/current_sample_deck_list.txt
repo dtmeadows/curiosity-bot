@@ -1,0 +1,15 @@
+Deck
+1 Rally the Ranks (KHM) 20
+2 Glacial Floodplain (KHM) 257
+1 Reidane, God of the Worthy (KHM) 21
+2 Clarion Spirit (KHM) 6
+1 Colossal Plow (KHM) 236
+1 Rune of Sustenance (KHM) 25
+1 Spectral Steel (KHM) 30
+1 Valkyrie's Sword (KHM) 36
+2 Ice Tunnel (KHM) 262
+16 Plains (KLR) 288
+4 Battlefield Raptor (KHM) 3
+2 Codespell Cleric (KHM) 7
+4 Valor of the Worthy (KHM) 37
+3 Wings of the Cosmos (KHM) 39
