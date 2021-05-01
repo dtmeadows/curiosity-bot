@@ -1,15 +1,24 @@
 Deck
-1 Rally the Ranks (KHM) 20
-2 Glacial Floodplain (KHM) 257
-1 Reidane, God of the Worthy (KHM) 21
-2 Clarion Spirit (KHM) 6
-1 Colossal Plow (KHM) 236
-1 Rune of Sustenance (KHM) 25
-1 Spectral Steel (KHM) 30
-1 Valkyrie's Sword (KHM) 36
-2 Ice Tunnel (KHM) 262
-16 Plains (KLR) 288
-4 Battlefield Raptor (KHM) 3
-2 Codespell Cleric (KHM) 7
-4 Valor of the Worthy (KHM) 37
-3 Wings of the Cosmos (KHM) 39
+1 Mavinda, Students' Advocate (STX) 21
+7 Swamp (STX) 371
+1 Shaile, Dean of Radiance (STX) 158
+2 Eyetwitch (STX) 70
+7 Plains (STX) 367
+2 Detention Vortex (STX) 13
+1 Closing Statement (STX) 169
+1 Humiliate (STX) 193
+2 Essence Infusion (STX) 69
+2 Make Your Mark (STX) 204
+4 Guiding Voice (STX) 19
+2 Eager First-Year (STX) 16
+2 Unwilling Ingredient (STX) 90
+1 Promising Duskmage (STX) 85
+1 Pilgrim of the Ages (STX) 22
+2 Expel (STX) 18
+2 Silverquill Campus (STX) 273
+
+Sideboard
+1 Pest Summoning (STX) 211
+2 Introduction to Prophecy (STX) 4
+3 Environmental Sciences (STX) 1
+1 Introduction to Annihilation (STX) 3

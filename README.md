@@ -3,7 +3,12 @@ TODO list:
 - [ ] write script to update database
 - [ ] get discord bot working (needs to dynamically determine the set)
 
-how to update with new sets: 
+# how to run 
+- `npm install` on fresh git clone 
+- `node ./bin/www` to run locally 
+- http://localhost:3000 to check it works
+
+# how to update with new sets: 
 - download new table: https://mtgjson.com/downloads/all-files/
 - open file in sqlite3
 ```bash
