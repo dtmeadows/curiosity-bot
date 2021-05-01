@@ -1,5 +1,4 @@
 Deck
-1 Mavinda, Students' Advocate (STX) 21
 7 Swamp (STX) 371
 1 Shaile, Dean of Radiance (STX) 158
 2 Eyetwitch (STX) 70
@@ -16,6 +15,7 @@ Deck
 1 Pilgrim of the Ages (STX) 22
 2 Expel (STX) 18
 2 Silverquill Campus (STX) 273
+1 Growth Spiral (STA) 124
 
 Sideboard
 1 Pest Summoning (STX) 211
