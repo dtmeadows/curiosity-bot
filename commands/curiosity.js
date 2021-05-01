@@ -1,6 +1,6 @@
 const Database = require('better-sqlite3');
 
-const CURRENT_SET = 'KLD';
+const CURRENT_SET = 'STX';
 
 const db = new Database('./AllPrintings.sqlite');
 db.pragma('journal_mode = WAL');
@@ -94,22 +94,28 @@ function parsedCardsFromRawLines(rawDataArray) {
 }
 
 function checkIfSameCardExistsInAllowedSet(card, approvedSet) {
+  switch (approvedSet) {
+    case 'STX':
+      sets = ['STX', 'STA']
+      break; 
+    default: 
+    sets = [approvedSet]
+  }
+  var quotedSets = sets.map(function(id) { return "'" + id + "'"; }).join(", ");
+
   const query = `
     select name, setCode, number, rarity, types
     from usable_cards
     where
-      setCode = '$approvedSet'
-      and name = '$cardName'
+      setCode in (${quotedSets})
+      and name = '${card.cardName}'
   `;
 
   // you could argue we should check if other stuff is equivalent
   // in case somehow someone brought a different version of the card in
   let results;
   try {
-    results = db.prepare(query).get({
-      approvedSet: approvedSet, 
-      cardName: card.cardName,
-    });
+    results = db.prepare(query).get();
   } catch (e) {
     console.log(e);
     console.log(query);
